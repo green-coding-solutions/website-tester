@@ -19,7 +19,7 @@ flow:
     container: gcb-playwright
     commands:
       - type: console
-        command: python3 /tmp/repo/visit_and_wait.py about:blank
+        command: python3 /tmp/repo/visit_and_idle.py about:blank
         read-notes-stdout: true
         log-stdout: true
         log-stderr: true
