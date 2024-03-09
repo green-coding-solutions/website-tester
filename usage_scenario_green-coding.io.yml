@@ -1,0 +1,43 @@
+---
+name: The Guardian Website Test
+author: Arne Tarara <arne@green-coding.io>
+description: Opens the green-coding.io page, waits for full load
+
+sci:
+  R_d: Website load
+
+services:
+  gcb-playwright:
+    image: greencoding/gcb_playwright:v6
+#    volumes:
+#       - /tmp/.X11-unix:/tmp/.X11-unix # for debugging in non-headless mode
+    environment:
+       DISPLAY: ":0" # for debugging in non-headless mode
+
+flow:
+  - name: Idle Browser
+    container: gcb-playwright
+    commands:
+      - type: console
+        command: python3 /tmp/repo/visit_and_wait.py about:blank
+        read-notes-stdout: true
+        log-stdout: true
+        log-stderr: true
+
+  - name: Visit page and idle
+    container: gcb-playwright
+    commands:
+      - type: console
+        command: python3 /tmp/repo/visit_and_idle.py https://www.green-coding.io
+        read-notes-stdout: true
+        log-stdout: true
+        log-stderr: true
+
+  - name: Visit page and close
+    container: gcb-playwright
+    commands:
+      - type: console
+        command: python3 /tmp/repo/visit.py https://www.green-coding.io
+        read-notes-stdout: true
+        log-stdout: true
+        log-stderr: true
