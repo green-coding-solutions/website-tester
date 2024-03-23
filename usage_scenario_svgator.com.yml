@@ -24,6 +24,15 @@ flow:
         log-stdout: true
         log-stderr: true
 
+  - name: Warmup
+    container: gcb-playwright
+    commands:
+      - type: console
+        command: python3 /tmp/repo/visit.py https://www.svgator.com/svg-path-animation
+        read-notes-stdout: true
+        log-stdout: true
+        log-stderr: true
+
   - name: Visit page and idle
     container: gcb-playwright
     commands:

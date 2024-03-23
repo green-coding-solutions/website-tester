@@ -24,6 +24,15 @@ flow:
         log-stdout: true
         log-stderr: true
 
+  - name: Warump
+    container: gcb-playwright
+    commands:
+      - type: console
+        command: python3 /tmp/repo/visit.py https://www.green-coding.io
+        read-notes-stdout: true
+        log-stdout: true
+        log-stderr: true
+
   - name: Visit page and idle
     container: gcb-playwright
     commands:
