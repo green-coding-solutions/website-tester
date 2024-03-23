@@ -6,47 +6,62 @@ description: Opens the green-coding.io page, waits for full load
 sci:
   R_d: Website load
 
-services:
-  gcb-playwright:
-    image: greencoding/gcb_playwright:v6
-#    volumes:
-#       - /tmp/.X11-unix:/tmp/.X11-unix # for debugging in non-headless mode
-    environment:
-       DISPLAY: ":0" # for debugging in non-headless mode
+compose-file: !include compose.yml
 
 flow:
-  - name: Idle Browser
+
+  - name: Create named pipe
     container: gcb-playwright
     commands:
       - type: console
-        command: python3 /tmp/repo/visit_and_idle.py about:blank
+        command: mkfifo /tmp/my_fifo
+
+  - name: Startup
+    container: gcb-playwright
+    commands:
+      - type: console
+        detach: true
+        command: python3 /tmp/repo/visit.py
         read-notes-stdout: true
         log-stdout: true
         log-stderr: true
+
+  - name: Pause
+    container: gcb-playwright
+    commands:
+      - type: console
+        command: sleep 2
+        read-notes-stdout: true
+        log-stdout: true
+        log-stderr: true
+
 
   - name: Warump
     container: gcb-playwright
     commands:
       - type: console
-        command: python3 /tmp/repo/visit.py https://www.green-coding.io
+        shell: bash
+        command: echo "https://www.green-coding.io" > /tmp/my_fifo
         read-notes-stdout: true
         log-stdout: true
         log-stderr: true
 
-  - name: Visit page and idle
+  - name: Load and idle
     container: gcb-playwright
     commands:
       - type: console
-        command: python3 /tmp/repo/visit_and_idle.py https://www.green-coding.io
+        shell: bash
+        command: echo "https://www.green-coding.io" > /tmp/my_fifo && sleep 60
         read-notes-stdout: true
         log-stdout: true
         log-stderr: true
 
-  - name: Visit page and close
+  - name: Load
     container: gcb-playwright
     commands:
       - type: console
-        command: python3 /tmp/repo/visit.py https://www.green-coding.io
+        shell: bash
+        command: echo "https://www.green-coding.io" > /tmp/my_fifo
         read-notes-stdout: true
         log-stdout: true
         log-stderr: true

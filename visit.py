@@ -1,6 +1,10 @@
 import contextlib
 import sys
 from time import time_ns, sleep
+import os
+
+fifo_path = '/tmp/my_fifo'
+
 
 from playwright.sync_api import Playwright, sync_playwright, expect, TimeoutError
 
@@ -12,7 +16,7 @@ def log_note(message: str) -> None:
     timestamp = str(time_ns())[:16]
     print(f"{timestamp} {message}")
 
-def run(playwright: Playwright, browser_name: str, url: str) -> None:
+def run(playwright: Playwright, browser_name: str) -> None:
     log_note(f"Launch browser {browser_name}")
     if browser_name == "firefox":
         browser = playwright.firefox.launch(headless=True, proxy=proxy_server)
@@ -24,10 +28,16 @@ def run(playwright: Playwright, browser_name: str, url: str) -> None:
     page = context.new_page()
 
     try:
-        log_note("Opening URL")
-        page.goto(url)
-        page.wait_for_load_state('load')
-        log_note("DOM Content Loaded. Staying Idle for 10 seconds to log animations")
+        for i in range(1,10):
+            with open(fifo_path, 'r') as fifo:
+              # Read data from the named pipe
+              url = fifo.read()
+              log_note(f"Opening URL {url}")
+              context = browser.new_context(ignore_https_errors=True)
+              page = context.new_page()
+              page.goto(url)
+              page.wait_for_load_state('load')
+              log_note(f"Finished loading URL {url}")
 
 
     except Exception as e:
@@ -51,7 +61,5 @@ if __name__ == "__main__":
     else:
         browser_name = "chromium"
 
-    url = sys.argv[1]
-
     with sync_playwright() as playwright:
-        run(playwright, browser_name, url)
+        run(playwright, browser_name)
