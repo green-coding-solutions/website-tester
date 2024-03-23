@@ -41,3 +41,13 @@ flow:
         read-notes-stdout: true
         log-stdout: true
         log-stderr: true
+
+
+  - name: Dump Log
+    container: squid
+    commands:
+      - type: console
+        command: cat /apps/squid/var/logs/access.log
+        read-notes-stdout: true
+        log-stdout: true
+        log-stderr: true

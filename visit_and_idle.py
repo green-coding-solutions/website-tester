@@ -4,6 +4,10 @@ from time import time_ns, sleep
 
 from playwright.sync_api import Playwright, sync_playwright, expect, TimeoutError
 
+proxy_server = {
+    "server": "http://squid:3128",
+}
+
 def log_note(message: str) -> None:
     timestamp = str(time_ns())[:16]
     print(f"{timestamp} {message}")
@@ -11,13 +15,12 @@ def log_note(message: str) -> None:
 def run(playwright: Playwright, browser_name: str, url: str) -> None:
     log_note(f"Launch browser {browser_name}")
     if browser_name == "firefox":
-        browser = playwright.firefox.launch(headless=True)
+        browser = playwright.firefox.launch(headless=True, proxy=proxy_server)
     else:
         # this leverages new headless mode by Chromium: https://developer.chrome.com/articles/new-headless/
-        # This mode is less detectable by websites and thus no mitgations will be applied by test candidate
         # The mode is however ~40% slower: https://github.com/microsoft/playwright/issues/21216
-        browser = playwright.chromium.launch(headless=False,args=["--headless=new"])
-    context = browser.new_context()
+        browser = playwright.chromium.launch(headless=False,args=["--headless=new"], proxy=proxy_server)
+    context = browser.new_context(ignore_https_errors=True)
     page = context.new_page()
 
     try:
