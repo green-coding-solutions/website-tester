@@ -6,6 +6,9 @@ description: Opens the guardian page, waits for full load
 sci:
   R_d: Website load
 
+compose-file: !include compose.yml
+
+
 flow:
 
   - name: Create named pipe
