@@ -36,7 +36,7 @@ flow:
         log-stderr: true
 
 
-  - name: Warump
+  - name: Warmup
     container: gcb-playwright
     commands:
       - type: console
