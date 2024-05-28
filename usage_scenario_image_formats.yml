@@ -1,0 +1,146 @@
+---
+name: Image Format test
+author: Arne Tarara <arne@green-coding.io>
+description: Opens images from https://github.com/green-coding-solutions/image-formats and compares rendering cost
+
+sci:
+  R_d: Image render
+
+compose-file: !include compose.yml
+
+flow:
+
+  - name: Create named pipe
+    container: gcb-playwright
+    commands:
+      - type: console
+        command: mkfifo /tmp/my_fifo
+
+  - name: Startup
+    container: gcb-playwright
+    commands:
+      - type: console
+        detach: true
+        command: python3 /tmp/repo/visit.py
+        read-notes-stdout: true
+        log-stdout: true
+        log-stderr: true
+
+  - name: Pause
+    container: gcb-playwright
+    commands:
+      - type: console
+        command: sleep 2
+        read-notes-stdout: true
+        log-stdout: true
+        log-stderr: true
+
+
+  - name: Warmup
+    container: gcb-playwright
+    commands:
+      - type: console
+        shell: bash
+        command: echo "https://raw.githubusercontent.com/green-coding-solutions/image-formats/main/p1.gif" > /tmp/my_fifo
+        read-notes-stdout: true
+        log-stdout: true
+        log-stderr: true
+      - type: console
+        shell: bash
+        command: echo "https://raw.githubusercontent.com/green-coding-solutions/image-formats/main/p1.avif" > /tmp/my_fifo
+        read-notes-stdout: true
+        log-stdout: true
+        log-stderr: true
+      - type: console
+        shell: bash
+        command: echo "https://raw.githubusercontent.com/green-coding-solutions/image-formats/main/p1.jpg" > /tmp/my_fifo
+        read-notes-stdout: true
+        log-stdout: true
+        log-stderr: true
+      - type: console
+        shell: bash
+        command: echo "https://raw.githubusercontent.com/green-coding-solutions/image-formats/main/p1.webp" > /tmp/my_fifo
+        read-notes-stdout: true
+        log-stdout: true
+        log-stderr: true
+      - type: console
+        shell: bash
+        command: echo "https://raw.githubusercontent.com/green-coding-solutions/image-formats/main/p1.png" > /tmp/my_fifo
+        read-notes-stdout: true
+        log-stdout: true
+        log-stderr: true
+      - type: console
+        shell: bash
+        command: echo "https://raw.githubusercontent.com/green-coding-solutions/image-formats/main/p1.tiff" > /tmp/my_fifo
+        read-notes-stdout: true
+        log-stdout: true
+        log-stderr: true
+
+  - name: GIF
+    container: gcb-playwright
+    commands:
+      - type: console
+        shell: bash
+        command: echo "https://raw.githubusercontent.com/green-coding-solutions/image-formats/main/p1.gif" > /tmp/my_fifo
+        read-notes-stdout: true
+        log-stdout: true
+        log-stderr: true
+
+  - name: AVIF
+    container: gcb-playwright
+    commands:
+      - type: console
+        shell: bash
+        command: echo "https://raw.githubusercontent.com/green-coding-solutions/image-formats/main/p1.avif" > /tmp/my_fifo
+        read-notes-stdout: true
+        log-stdout: true
+        log-stderr: true
+
+  - name: JPEG
+    container: gcb-playwright
+    commands:
+      - type: console
+        shell: bash
+        command: echo "https://raw.githubusercontent.com/green-coding-solutions/image-formats/main/p1.jpg" > /tmp/my_fifo
+        read-notes-stdout: true
+        log-stdout: true
+        log-stderr: true        
+
+  - name: webP
+    container: gcb-playwright
+    commands:
+      - type: console
+        shell: bash
+        command: echo "https://raw.githubusercontent.com/green-coding-solutions/image-formats/main/p1.webp" > /tmp/my_fifo
+        read-notes-stdout: true
+        log-stdout: true
+        log-stderr: true     
+
+  - name: PNG
+    container: gcb-playwright
+    commands:
+      - type: console
+        shell: bash
+        command: echo "https://raw.githubusercontent.com/green-coding-solutions/image-formats/main/p1.png" > /tmp/my_fifo
+        read-notes-stdout: true
+        log-stdout: true
+        log-stderr: true     
+
+  - name: TIFF
+    container: gcb-playwright
+    commands:
+      - type: console
+        shell: bash
+        command: echo "https://raw.githubusercontent.com/green-coding-solutions/image-formats/main/p1.tiff" > /tmp/my_fifo
+        read-notes-stdout: true
+        log-stdout: true
+        log-stderr: true     
+
+  - name: Dump Log
+    container: squid
+    commands:
+      - type: console
+        command: cat /apps/squid/var/logs/access.log
+        read-notes-stdout: true
+        log-stdout: true
+        log-stderr: true
