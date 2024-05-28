@@ -41,37 +41,37 @@ flow:
     commands:
       - type: console
         shell: bash
-        command: echo "https://raw.githubusercontent.com/green-coding-solutions/image-formats/main/p1.gif" > /tmp/my_fifo
+        command: echo "https://image-formats.pages.dev/index_gif" > /tmp/my_fifo
         read-notes-stdout: true
         log-stdout: true
         log-stderr: true
       - type: console
         shell: bash
-        command: echo "https://raw.githubusercontent.com/green-coding-solutions/image-formats/main/p1.avif" > /tmp/my_fifo
+        command: echo "https://image-formats.pages.dev/index_avif" > /tmp/my_fifo
         read-notes-stdout: true
         log-stdout: true
         log-stderr: true
       - type: console
         shell: bash
-        command: echo "https://raw.githubusercontent.com/green-coding-solutions/image-formats/main/p1.jpg" > /tmp/my_fifo
+        command: echo "https://image-formats.pages.dev/index_jpg" > /tmp/my_fifo
         read-notes-stdout: true
         log-stdout: true
         log-stderr: true
       - type: console
         shell: bash
-        command: echo "https://raw.githubusercontent.com/green-coding-solutions/image-formats/main/p1.webp" > /tmp/my_fifo
+        command: echo "https://image-formats.pages.dev/index_webp" > /tmp/my_fifo
         read-notes-stdout: true
         log-stdout: true
         log-stderr: true
       - type: console
         shell: bash
-        command: echo "https://raw.githubusercontent.com/green-coding-solutions/image-formats/main/p1.png" > /tmp/my_fifo
+        command: echo "https://image-formats.pages.dev/index_png" > /tmp/my_fifo
         read-notes-stdout: true
         log-stdout: true
         log-stderr: true
       - type: console
         shell: bash
-        command: echo "https://raw.githubusercontent.com/green-coding-solutions/image-formats/main/p1.tiff" > /tmp/my_fifo
+        command: echo "https://image-formats.pages.dev/index_tiff" > /tmp/my_fifo
         read-notes-stdout: true
         log-stdout: true
         log-stderr: true
@@ -81,7 +81,7 @@ flow:
     commands:
       - type: console
         shell: bash
-        command: echo "https://raw.githubusercontent.com/green-coding-solutions/image-formats/main/p1.gif" > /tmp/my_fifo
+        command: echo "https://image-formats.pages.dev/index_gif" > /tmp/my_fifo
         read-notes-stdout: true
         log-stdout: true
         log-stderr: true
@@ -91,7 +91,7 @@ flow:
     commands:
       - type: console
         shell: bash
-        command: echo "https://raw.githubusercontent.com/green-coding-solutions/image-formats/main/p1.avif" > /tmp/my_fifo
+        command: echo "https://image-formats.pages.dev/index_avif" > /tmp/my_fifo
         read-notes-stdout: true
         log-stdout: true
         log-stderr: true
@@ -101,7 +101,7 @@ flow:
     commands:
       - type: console
         shell: bash
-        command: echo "https://raw.githubusercontent.com/green-coding-solutions/image-formats/main/p1.jpg" > /tmp/my_fifo
+        command: echo "https://image-formats.pages.dev/index_jpg" > /tmp/my_fifo
         read-notes-stdout: true
         log-stdout: true
         log-stderr: true        
@@ -111,7 +111,7 @@ flow:
     commands:
       - type: console
         shell: bash
-        command: echo "https://raw.githubusercontent.com/green-coding-solutions/image-formats/main/p1.webp" > /tmp/my_fifo
+        command: echo "https://image-formats.pages.dev/index_webp" > /tmp/my_fifo
         read-notes-stdout: true
         log-stdout: true
         log-stderr: true     
@@ -121,7 +121,7 @@ flow:
     commands:
       - type: console
         shell: bash
-        command: echo "https://raw.githubusercontent.com/green-coding-solutions/image-formats/main/p1.png" > /tmp/my_fifo
+        command: echo "https://image-formats.pages.dev/index_png" > /tmp/my_fifo
         read-notes-stdout: true
         log-stdout: true
         log-stderr: true     
@@ -131,7 +131,7 @@ flow:
     commands:
       - type: console
         shell: bash
-        command: echo "https://raw.githubusercontent.com/green-coding-solutions/image-formats/main/p1.tiff" > /tmp/my_fifo
+        command: echo "https://image-formats.pages.dev/index_tiff" > /tmp/my_fifo
         read-notes-stdout: true
         log-stdout: true
         log-stderr: true     
