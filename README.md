@@ -15,10 +15,30 @@ are async parsing, the OS scheduler, network latency etc.
 
 We use the [Green Metrics Tool](https://github.com/green-coding-berlin/green-metrics-tool/) to setup a simple Playwright Headless Browser based benchmark.
 
-There are different types of pages:
+There are some example types of pages:
 
 - bbc.co.uk - Media. Lots of images and tracking
 - theguardian.co.uk - Media. Lots if images and tracking
 - michaelkors.de - Playing video
 - green-coding.io - low fi
 - svgator.com - SVG Animation
+
+## Adding sites
+
+We have a frontend to add new sites to this repo and have them tested with our [Green Metrics Tool](https://www.green-coding.io/projects/green-metrics-tool/)
+
+See: https://website-tester.green-coding.io/
+
+## Building in production
+
+For production `usage_scenario.yml` files we pre-building the squid container.
+
+Build command (please adjust the tag to your repository): 
+
+> Please look up details how to setup your build infrastructure here: https://docs.docker.com/build/building/multi-platform/
+```bash
+docker buildx build --platform linux/amd64,linux/arm64 --push -t greencoding/squid_reverse_proxy:v1 .
+```
+
+### Pre-Built
+We supply a pre-built container via: `greencoding/squid_reverse_proxy:v1` from Docker Hub.
