@@ -1,0 +1,112 @@
+
+---
+name: The www.datafuse.de Website Test
+author: Unknown
+description: Opens the www.datafuse.de page, waits for full load
+
+sci:
+  R_d: Website load
+
+services:
+  gcb-playwright-warmup:
+    image: greencoding/gcb_playwright:v6
+  gcb-playwright-run:
+    image: greencoding/gcb_playwright:v6
+
+  squid:
+    image: greencoding/squid_reverse_proxy:v1
+    ports:
+      - 3128:3128
+
+flow:
+
+  - name: Named pipe (warmup)
+    container: gcb-playwright-warump
+    commands:
+      - type: console
+        command: mkfifo /tmp/my_fifo_warmup
+
+  - name: Named pipe (run)
+    container: gcb-playwright-run
+    commands:
+      - type: console
+        command: mkfifo /tmp/my_fifo_run
+
+  - name: Startup (warmup)
+    container: gcb-playwright-warmup
+    commands:
+      - type: console
+        detach: true
+        command: python3 /tmp/repo/visit.py --fifo-path /tmp/my_fifo_warmup
+        read-notes-stdout: true
+        log-stdout: true
+        log-stderr: true
+
+  - name: Startup (run)
+    container: gcb-playwright-run
+    commands:
+      - type: console
+        detach: true
+        command: python3 /tmp/repo/visit.py --fifo-path /tmp/my_fifo_run
+        read-notes-stdout: true
+        log-stdout: true
+        log-stderr: true
+
+
+  - name: Pause (both)
+    container: gcb-playwright-warmup
+    commands:
+      - type: console
+        command: sleep 2
+        read-notes-stdout: true
+        log-stdout: true
+        log-stderr: true
+
+  - name: Warmup
+    container: gcb-playwright-warmup
+    commands:
+      - type: console
+        shell: bash
+        command: echo "https://www.datafuse.de/save" > /tmp/my_fifo_warmup
+        read-notes-stdout: true
+        log-stdout: true
+        log-stderr: true
+
+  - name: Warmup
+    container: gcb-playwright-warmup
+    commands:
+      - type: console
+        shell: bash
+        command: echo "https://www.datafuse.de/save" > /tmp/my_fifo_warmup
+        read-notes-stdout: true
+        log-stdout: true
+        log-stderr: true
+
+  - name: Step www.datafuse.de/save
+    container: gcb-playwright-run
+    commands:
+      - type: console
+        shell: bash
+        command: echo "https://www.datafuse.de/save" > /tmp/my_fifo_run && sleep 5
+        read-notes-stdout: true
+        log-stdout: true
+        log-stderr: true
+
+  - name: Step www.datafuse.de
+    container: gcb-playwright-run
+    commands:
+      - type: console
+        shell: bash
+        command: echo "https://www.datafuse.de" > /tmp/my_fifo_run && sleep 5
+        read-notes-stdout: true
+        log-stdout: true
+        log-stderr: true
+
+  - name: Dump Log
+    container: squid
+    commands:
+      - type: console
+        command: cat /apps/squid/var/logs/access.log
+        read-notes-stdout: true
+        log-stdout: true
+        log-stderr: true
