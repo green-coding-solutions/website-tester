@@ -2,9 +2,7 @@ import contextlib
 import sys
 from time import time_ns, sleep
 import os
-
-fifo_path = '/tmp/my_fifo'
-
+import argparse
 
 from playwright.sync_api import Playwright, sync_playwright, expect, TimeoutError
 
@@ -16,7 +14,7 @@ def log_note(message: str) -> None:
     timestamp = str(time_ns())[:16]
     print(f"{timestamp} {message}")
 
-def run(playwright: Playwright, browser_name: str) -> None:
+def run(playwright: Playwright, browser_name: str, fifo_path = str) -> None:
     log_note(f"Launch browser {browser_name}")
     if browser_name == "firefox":
         browser = playwright.firefox.launch(headless=True, proxy=proxy_server)
@@ -53,13 +51,9 @@ def run(playwright: Playwright, browser_name: str) -> None:
 
 
 if __name__ == "__main__":
-    if len(sys.argv) > 2:
-        browser_name = sys.argv[2].lower()
-        if browser_name not in ["chromium", "firefox"]:
-            print("Invalid browser name. Please choose either 'chromium' or 'firefox'.")
-            sys.exit(1)
-    else:
-        browser_name = "chromium"
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--browser', type=str, help='Select Firefox or Chromium', default='chromium')
+    parser.add_argument('--fifo-path', type=str, help='Specify the path to the FIFO buffer to use for going to next page', default='/tmp/my_fifo')
 
     with sync_playwright() as playwright:
-        run(playwright, browser_name)
+        run(playwright, browser=args.browser.lower(), fifo_path=args.fifo_path)
