@@ -14,7 +14,7 @@ def log_note(message: str) -> None:
     timestamp = str(time_ns())[:16]
     print(f"{timestamp} {message}")
 
-def run(playwright: Playwright, browser_name: str, fifo_path = str) -> None:
+def run(playwright: Playwright, browser_name: str, fifo_path: str) -> None:
     log_note(f"Launch browser {browser_name}")
     if browser_name == "firefox":
         browser = playwright.firefox.launch(headless=True, proxy=proxy_server)
@@ -57,4 +57,4 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     with sync_playwright() as playwright:
-        run(playwright, browser=args.browser.lower(), fifo_path=args.fifo_path)
+        run(playwright, browser_name=args.browser.lower(), fifo_path=args.fifo_path)
