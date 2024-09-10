@@ -54,6 +54,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--browser', type=str, help='Select Firefox or Chromium', default='chromium')
     parser.add_argument('--fifo-path', type=str, help='Specify the path to the FIFO buffer to use for going to next page', default='/tmp/my_fifo')
+    args = parser.parse_args()
 
     with sync_playwright() as playwright:
         run(playwright, browser=args.browser.lower(), fifo_path=args.fifo_path)
