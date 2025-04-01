@@ -1,0 +1,98 @@
+
+---
+name: The xhamster.com Website Test
+author: Unknown
+description: Opens the xhamster.com page, waits for full load
+
+sci:
+  R_d: Website load
+
+services:
+  gcb-playwright-proxy:
+    image: greencoding/gcb_playwright:v17
+  gcb-playwright-user:
+    image: greencoding/gcb_playwright:v17
+
+  squid:
+    image: greencoding/squid_reverse_proxy:v1
+    ports:
+      - 3128:3128
+
+flow:
+
+  - name: Named pipe (proxy-cache-warmup)
+    container: gcb-playwright-proxy
+    commands:
+      - type: console
+        command: mkfifo /tmp/my_fifo_warmup
+        hidden: true
+
+  - name: Named pipe (user)
+    container: gcb-playwright-user
+    commands:
+      - type: console
+        command: mkfifo /tmp/my_fifo_run
+        hidden: true
+
+  - name: Startup (proxy-cache-warmup)
+    container: gcb-playwright-proxy
+    commands:
+      - type: console
+        detach: true
+        command: python3 /tmp/repo/visit.py --fifo-path /tmp/my_fifo_warmup
+        read-notes-stdout: true
+        log-stdout: true
+        log-stderr: true
+        hidden: true
+
+  - name: Startup Browser
+    container: gcb-playwright-user
+    commands:
+      - type: console
+        detach: true
+        command: python3 /tmp/repo/visit.py --fifo-path /tmp/my_fifo_run
+        read-notes-stdout: true
+        log-stdout: true
+        log-stderr: true
+
+
+  - name: Pause (both)
+    container: gcb-playwright-proxy
+    commands:
+      - type: console
+        command: sleep 2
+        read-notes-stdout: true
+        log-stdout: true
+        log-stderr: true
+        hidden: true
+
+  - name: Warmup Proxy Caches and idle
+    container: gcb-playwright-proxy
+    commands:
+      - type: console
+        shell: bash
+        command: echo "https://xhamster.com" > /tmp/my_fifo_warmup && sleep 5
+        read-notes-stdout: true
+        log-stdout: true
+        log-stderr: true
+        hidden: true
+
+  - name: Browse to and idle
+    container: gcb-playwright-user
+    commands:
+      - type: console
+        shell: bash
+        command: echo "https://xhamster.com" > /tmp/my_fifo_run && sleep 5
+        read-notes-stdout: true
+        log-stdout: true
+        log-stderr: true
+
+  - name: Dump Log (proxy-cache-warmup)
+    container: squid
+    commands:
+      - type: console
+        command: cat /apps/squid/var/logs/access.log
+        read-notes-stdout: true
+        log-stdout: true
+        log-stderr: true
+        hidden: true
